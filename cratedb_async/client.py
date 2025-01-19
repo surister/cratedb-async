@@ -9,7 +9,7 @@ _CRATE_ENDPOINT = "/_sql"
 
 
 def _create_insert_query(table_name: str, value_count: int) -> str:
-    """Creates a insert query with value placeholders
+    """Creates an insert query with value placeholders
 
     Args:
         table_name: The name of the table.
@@ -78,11 +78,14 @@ class CrateClient:
         return self._parse_response(response)
 
     async def bulk_insert(self, table_name: str, rows: Rows = None) -> SQLResponse:
-        """Example function with PEP 484 type annotations.
+        """Runs a bulk insert to the cluster; this is the most efficient way to ingest data.
 
         Args:
             table_name: The name of the table.
             rows: Rows that will be sent in the bulk_insert, every row is sent in the same request.
+
+        Note:
+            Rows are not batched, if the number of rows is large, you will benefit from batching.
 
         Returns:
             The response from the cluster.
