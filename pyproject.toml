@@ -9,7 +9,6 @@ readme = "README.md"
 python = "^3.12"
 httpx = {version = "^0.28.1", extras = ["http2"]}
 orjson = "^3.10.14"
-polars = "^1.20.0"
 
 
 [tool.poetry.group.dev.dependencies]
