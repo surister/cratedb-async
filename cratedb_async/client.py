@@ -1,18 +1,43 @@
+from typing import Optional
+
 import httpx
 
-from .types import SEVERAL_SERVERS, SINGLE_SERVER, ROWS
-from .response import SQLResponse
+from cratedb_async.types import SeveralServers, SingleServer, Rows
+from cratedb_async.response import SQLResponse
 
 _CRATE_ENDPOINT = "/_sql"
 
 
+def _create_insert_query(table_name: str, value_count: int) -> str:
+    """Creates a insert query with value placeholders
+
+    Args:
+        table_name: The name of the table.
+        value_count: How many values will be inserted, for placeholder generation.
+
+    Returns:
+        The insert query.
+
+    Examples:
+        >>> _create_insert_query("tbl", 4)
+        'insert into "tbl" values (?,?,?,?)'
+
+    """
+    placeholders = "?," * value_count
+
+    if value_count > 0:
+        placeholders = placeholders[:-1]
+
+    return f"insert into \"{table_name}\" values ({placeholders})"
+
+
 class CrateClient:
     """
-    Represents a connection to a CrateDB cluster.
+    Represents a connection to a CrateDB cluster, the `HTTP` api is used.
     """
 
     def __init__(self,
-                 servers: SINGLE_SERVER | SEVERAL_SERVERS,
+                 servers: SingleServer | SeveralServers,
                  client: httpx.AsyncClient = None):
         self.servers = servers
         self.client_async = client or httpx.AsyncClient()
@@ -20,35 +45,48 @@ class CrateClient:
     def _parse_response(self, response: httpx.Response) -> SQLResponse:
         obj = response.json()
         return SQLResponse(
-            error=obj.get('error', {}).get('message') or None,
-            columns=obj.get('cols'),
-            rows=obj.get('rows'),
-            duration=obj.get('duration'),
-            row_count=obj.get('rowcount', 0)
+            error=obj.get("error", {}).get("message") or None,
+            columns=obj.get("cols"),
+            rows=obj.get("rows"),
+            duration=obj.get("duration"),
+            row_count=obj.get("rowcount", 0)
         )
 
-    def _create_bulk_query(self, table_name: str, row_count: int) -> str:
+    async def query(self, stmt: str, json: Optional[dict] = None, **kwargs) -> SQLResponse:
         """
-        row_count: int For how many values will '?' placeholder be added.
+        Runs a SQL statement in the cluster asynchronously.
+
+        Args:
+            stmt: The query statement.
+            json: JSON data sent in the ``httpx.post`` request.
+            **kwargs: Additional parameters for ``httpx``.
+
+        Returns:
+            The response from the cluster.
         """
-        placeholders = '?,' * row_count
+        json_dict = {"stmt": stmt}
 
-        if row_count > 0:
-            placeholders = placeholders[:-1]
-
-        return f"insert into {table_name} values ({placeholders})"
-
-    async def query(self, stmt: str, json: dict = None, **kwargs) -> SQLResponse:
-        json_dict = {'stmt': stmt}
         if json:
             json_dict |= json  # Merge the received json to the dict object we pass to the client
-        response = await self.client_async.post(self.servers + _CRATE_ENDPOINT, json=json_dict, **kwargs)
+
+        response = await self.client_async.post(
+            self.servers + _CRATE_ENDPOINT,
+            json=json_dict,
+            **kwargs
+        )
+
         return self._parse_response(response)
 
-    async def bulk_insert(self, table_name: str, rows: ROWS = None) -> SQLResponse:
+    async def bulk_insert(self, table_name: str, rows: Rows = None) -> SQLResponse:
+        """Example function with PEP 484 type annotations.
+
+        Args:
+            table_name: The name of the table.
+            rows: Rows that will be sent in the bulk_insert, every row is sent in the same request.
+
+        Returns:
+            The response from the cluster.
         """
-        Makes a bulk insert of `rows` using the bulk http API, this is the recommended way to
-        send rows to CrateDB
-        """
-        query = self._create_bulk_query(table_name, row_count=len(rows))
+
+        query = _create_insert_query(table_name, value_count=len(rows))
         return self.query(query, rows=rows)

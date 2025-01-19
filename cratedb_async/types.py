@@ -1,12 +1,12 @@
 from typing import Literal
 
-SINGLE_SERVER = str
-SEVERAL_SERVERS = list[SINGLE_SERVER]
+SingleServer = str
+SeveralServers = list[SingleServer]
 
-COLUMN = str
-COLUMNS = list[COLUMN]
+Column = str
+Columns = list[Column]
 
-ROW = list
-ROWS = list[ROW]
+Row = list
+Rows = list[Row]
 
-COLUMN_CENTER = Literal['left', 'center', 'right']
+ColumnCenter = Literal["left", "center", "right"]
