@@ -7,12 +7,14 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-trio = "^0.28.0"
 httpx = {version = "^0.28.1", extras = ["http2"]}
-requests = "^2.32.3"
 orjson = "^3.10.14"
-matplotlib = "^3.10.0"
 
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.4"
+trio = "^0.28.0"
+requests = "^2.32.3"
 
 [build-system]
 requires = ["poetry-core"]

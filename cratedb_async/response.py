@@ -1,22 +1,6 @@
 import dataclasses
-from typing import Literal
 
-import httpx
-
-import trio
-
-CRATE_ENDPOINT = '/_sql'
-
-SINGLE_SERVER = str
-SEVERAL_SERVERS = list[SINGLE_SERVER]
-
-COLUMN = str
-COLUMNS = list[COLUMN]
-
-ROW = list
-ROWS = list[ROW]
-
-COLUMN_CENTER = Literal['left', 'center', 'right']
+from .types import COLUMNS, COLUMN, ROWS, ROW, COLUMN_CENTER
 
 
 def center_string(string: str, pad_length: int, direction: COLUMN_CENTER = 'left') -> str:
@@ -53,7 +37,8 @@ def print_table(columns: COLUMNS, rows: ROWS, center_column: COLUMN_CENTER = 'le
 
     # Create rows
     row_lines = ["| " + " | ".join(
-        f"{center_string(str(row[i]), col_widths[i], center_column)}" for i in range(len(columns))) + " |" for row in rows]
+        f"{center_string(str(row[i]), col_widths[i], center_column)}" for i in range(len(columns))) + " |" for row in
+                 rows]
 
     # Combine everything
     table = "\n".join(
@@ -86,32 +71,3 @@ class SQLResponse:
             return print_table([' '], [[self.row_count]])
 
         return print_table(self.columns, self.rows[:max_rows], 'left')
-
-
-class CrateClient:
-    """
-    Represents a connection to a CrateDB cluster.
-    """
-    def __init__(self, servers: SINGLE_SERVER | SEVERAL_SERVERS):
-        self.servers = servers
-        self.client_async = httpx.AsyncClient()
-        self.client = httpx.Client()
-
-    def _parse_response(self, response: httpx.Response) -> SQLResponse:
-        obj = response.json()
-        return SQLResponse(
-            error=obj.get('error', {}).get('message') or None,
-            columns=obj.get('cols'),
-            rows=obj.get('rows'),
-            duration=obj.get('duration'),
-            row_count=obj.get('rowcount', 0)
-        )
-
-    async def query(self, stmt: str) -> None:
-        response = await self.client_async.post(self.servers + CRATE_ENDPOINT, json={'stmt': stmt})
-        return self._parse_response(response)
-
-    async def bulk_insert(self, table_name: str, rows: list):
-        stmt = f"insert into {table_name} VALUES (?,?,?,?,?)"
-        await self.client_async.post(self.servers + CRATE_ENDPOINT,
-                                     json={'stmt': stmt, "bulk_args": rows})
