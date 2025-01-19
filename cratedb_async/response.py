@@ -69,7 +69,7 @@ class SQLResponse:
         if not self.columns and self.error:
             return print_table(["error"], [[self.error]])
 
-        # No columns nor row, typical in DDL and DML
+        # No columns nor row, typical in DDL and DML.
         if not self.columns and not self.error:
             return print_table([" "], [[self.row_count]])
 
@@ -77,4 +77,5 @@ class SQLResponse:
 
     @property
     def ok(self) -> bool:
-        """Returns whether the """
+        """Returns whether the query resulted in an error."""
+        return not self.error
