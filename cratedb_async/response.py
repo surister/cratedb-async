@@ -13,7 +13,7 @@ def center_string(string: str, pad_length: int, direction: ColumnCenter = "left"
     return string.center(pad_length)
 
 
-def print_table(columns: Columns, rows: Rows, center_column: ColumnCenter = "left"):
+def print_table(columns: Columns, rows: Rows, column_center: ColumnCenter = "left"):
     # The width of every column, calculated as the max
     # length from the column name, or the biggest value.
     col_widths = []
@@ -33,12 +33,12 @@ def print_table(columns: Columns, rows: Rows, center_column: ColumnCenter = "lef
     separator = "+" + "+".join("-" * (width + 2) for width in col_widths) + "+"
     # Create header
     header = "| " + " | ".join(
-        f"{center_string(col, col_widths[i], center_column)}" for i, col in
+        f"{center_string(col, col_widths[i], column_center)}" for i, col in
         enumerate(columns)) + " |"
 
     # Create rows
     row_lines = ["| " + " | ".join(
-        f"{center_string(str(row[i]), col_widths[i], center_column)}" for i in
+        f"{center_string(str(row[i]), col_widths[i], column_center)}" for i in
         range(len(columns))) + " |" for row in
                  rows]
 

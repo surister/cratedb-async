@@ -6,7 +6,7 @@ SeveralServers = list[SingleServer]
 Column = str
 Columns = list[Column]
 
-Row = list
+Row = list | tuple
 Rows = list[Row]
 
 ColumnCenter = Literal["left", "center", "right"]
