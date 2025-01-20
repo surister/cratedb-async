@@ -52,7 +52,7 @@ class CrateClient:
             row_count=obj.get("rowcount", 0)
         )
 
-    async def query(self, stmt: str, json: Optional[dict] = None, **kwargs) -> SQLResponse:
+    async def query(self, stmt: str, json: Optional[dict] = None) -> SQLResponse:
         """
         Runs a SQL statement in the cluster asynchronously.
 
@@ -72,7 +72,7 @@ class CrateClient:
         response = await self.client_async.post(
             self.servers + _CRATE_ENDPOINT,
             json=json_dict,
-            **kwargs
+
         )
 
         return self._parse_response(response)
@@ -91,5 +91,5 @@ class CrateClient:
             The response from the cluster.
         """
 
-        query = _create_insert_query(table_name, value_count=len(rows))
-        return self.query(query, rows=rows)
+        query = _create_insert_query(table_name, value_count=len(rows[0]))
+        return await self.query(query, {'bulk_args': rows})
