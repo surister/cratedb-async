@@ -28,7 +28,10 @@ jobs:
 
       - name: Build release distributions
         run: |
-          # NOTE: put your own distribution build steps here.
+          poetry version ${{ github.event.inputs.version }}
+          git add pyproject.toml
+          git commit -m "bump up ${{ github.event.inputs.version }} version from workflow"
+          git push
           python -m pip install build
           python -m build
 
