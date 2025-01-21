@@ -33,15 +33,18 @@ jobs:
           
       - name: Setup Git
         run: |
-          git config user.name "${GITHUB_ACTOR}"
-          git config user.email "${GITHUB_ACTOR}@githubworkflow.com"
+          git config user.name "githubworkflow"
+          git config user.email "githubworkflow@users.noreply.github.com"
 
-      - name: Build release distributions
+      - name: Bump up version
         run: |
           poetry version ${{ github.ref_name }}
           git add .
           git commit -m "bump up ${{ github.ref_name }} version from workflow"
           git push origin HEAD:master
+
+      - name: Build release distributions
+        run: |
           python -m pip install build
           python -m build
 
