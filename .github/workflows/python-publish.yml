@@ -41,7 +41,7 @@ jobs:
           poetry version ${{ github.ref_name }}
           git add .
           git commit -m "bump up ${{ github.ref_name }} version from workflow"
-          git push
+          git push origin HEAD:master
           python -m pip install build
           python -m build
 
