@@ -38,7 +38,7 @@ jobs:
 
       - name: Build release distributions
         run: |
-          poetry version ${{ github.event.inputs.version }}
+          poetry version ${{ github.ref_name }}
           git add pyproject.toml
           git commit -m "bump up ${{ github.ref_name }} version from workflow"
           git push
