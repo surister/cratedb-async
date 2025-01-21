@@ -40,7 +40,7 @@ jobs:
         run: |
           poetry version ${{ github.event.inputs.version }}
           git add pyproject.toml
-          git commit -m "bump up ${{ github.ref_name }}" version from workflow"
+          git commit -m "bump up ${{ github.ref_name }} version from workflow"
           git push
           python -m pip install build
           python -m build
