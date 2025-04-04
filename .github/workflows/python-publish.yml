@@ -26,19 +26,28 @@ jobs:
         with:
           python-version: "3.x"
 
-      - name: setup poetry
-        run: |
-          python -m pip install -U pip
-          pip install poetry 
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
           
       - name: Setup Git
         run: |
           git config user.name "githubworkflow"
           git config user.email "githubworkflow@users.noreply.github.com"
 
-      - name: Bump up version
+      - name: Set VERSION from tag
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/v}" >> $GITHUB_ENV
+      - name: Echo VERSION From tag
         run: |
-          poetry version ${{ github.ref_name }}
+          echo $RELEASE_VERSION
+          echo ${{ env.RELEASE_VERSION }}
+
+      - name: Set VERSION to project
+        run: |
+          sed -i -E "s/^version = \".*\"/version = \"${{ env.RELEASE_VERSION }}\"/" pyproject.toml
+          cat pyproject.toml
+
+      - name: Commit version to project
+        run: |
           git add .
           git commit -m "bump up ${{ github.ref_name }} version from workflow"
           git push origin HEAD:master
