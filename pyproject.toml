@@ -1,22 +1,23 @@
-[tool.poetry]
+[project]
 name = "cratedb-async"
 version = "0.0.3"
 description = ""
-authors = ["surister <surister98@gmail.com>"]
+authors = [{ name = "surister", email = "surister98@gmail.com" }]
+requires-python = "~=3.12"
 readme = "README.md"
+dependencies = [
+    "httpx[http2]>=0.28.1,<0.29",
+    "orjson>=3.10.14,<4",
+]
 
-[tool.poetry.dependencies]
-python = "^3.12"
-httpx = {version = "^0.28.1", extras = ["http2"]}
-orjson = "^3.10.14"
-
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^8.3.4"
-trio = "^0.28.0"
-requests = "^2.32.3"
-pylint = "^3.3.3"
+[dependency-groups]
+dev = [
+    "pytest>=8.3.4,<9",
+    "trio>=0.28.0,<0.29",
+    "requests>=2.32.3,<3",
+    "pylint>=3.3.3,<4",
+]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
