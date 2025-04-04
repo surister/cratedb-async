@@ -1,4 +1,9 @@
+[![Upload](https://github.com/surister/cratedb-async/actions/workflows/python-publish.yml/badge.svg)](https://github.com/surister/cratedb-async/actions/workflows/python-publish.yml)
+![PyPI - Version](https://img.shields.io/pypi/v/cratedb-async?style=flat&color=green)
+![Python version ](https://img.shields.io/pypi/pyversions/cratedb-async
+)
 # CrateDB Async driver based on httpx.
+
 
 This CrateDB driver does not follow the DB-API, but its own API design.
 
