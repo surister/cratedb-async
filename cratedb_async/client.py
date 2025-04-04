@@ -8,12 +8,12 @@ from cratedb_async.response import SQLResponse
 _CRATE_ENDPOINT = "/_sql"
 
 
-def _create_insert_query(table_name: str, value_count: int) -> str:
+def _create_insert_query(table_name: str, row_count: int) -> str:
     """Creates an insert query with value placeholders
 
     Args:
         table_name: The name of the table.
-        value_count: How many values will be inserted, for placeholder generation.
+        row_count: How many values will be inserted, for placeholder generation.
 
     Returns:
         The insert query.
@@ -23,9 +23,9 @@ def _create_insert_query(table_name: str, value_count: int) -> str:
         'insert into "tbl" values (?,?,?,?)'
 
     """
-    placeholders = "?," * value_count
+    placeholders = "?," * row_count
 
-    if value_count > 0:
+    if row_count > 0:
         placeholders = placeholders[:-1]
 
     return f"insert into \"{table_name}\" values ({placeholders})"
