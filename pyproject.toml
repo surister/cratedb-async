@@ -6,8 +6,7 @@ authors = [{ name = "surister", email = "surister98@gmail.com" }]
 requires-python = ">=3.12"
 readme = "README.md"
 dependencies = [
-    "httpx[http2]>=0.28.1,<0.29",
-    "orjson>=3.10.14,<4",
+    "httpx[http2]>=0.28.1,<0.29"
 ]
 
 

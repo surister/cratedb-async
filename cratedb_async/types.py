@@ -1,4 +1,4 @@
-from typing import Literal
+from typing import Literal, Any
 
 SingleServer = str
 SeveralServers = list[SingleServer]
@@ -8,5 +8,7 @@ Columns = list[Column]
 
 Row = list | tuple
 Rows = list[Row]
+Object = dict[str: Any]
+JsonRows = list[Object]
 
 ColumnCenter = Literal["left", "center", "right"]

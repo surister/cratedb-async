@@ -2,7 +2,7 @@ from typing import Optional
 
 import httpx
 
-from cratedb_async.types import SeveralServers, SingleServer, Rows
+from cratedb_async.types import SeveralServers, SingleServer, Rows, JsonRows
 from cratedb_async.response import SQLResponse
 
 _CRATE_ENDPOINT = "/_sql"
