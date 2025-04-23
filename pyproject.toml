@@ -5,11 +5,23 @@ description = ""
 authors = [{ name = "surister", email = "surister98@gmail.com" }]
 requires-python = ">=3.12"
 readme = "README.md"
+license = { file = "LICENSE.md" }
+keywords = ['cratedb', 'driver', 'connector', 'database', 'http']
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Topic :: Database",
+    "Topic :: Database :: Front-Ends",
+    "Natural Language :: English",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+]
 dependencies = [
     "httpx[http2]>=0.28.1,<0.29"
 ]
-
-
 
 [build-system]
 requires = ["hatchling"]

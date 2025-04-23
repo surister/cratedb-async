@@ -1,15 +1,15 @@
-[![Upload](https://github.com/surister/cratedb-async/actions/workflows/python-publish.yml/badge.svg)](https://github.com/surister/cratedb-async/actions/workflows/python-publish.yml)
-![PyPI - Version](https://img.shields.io/pypi/v/cratedb-async?style=flat&color=green)
-![Python version ](https://img.shields.io/pypi/pyversions/cratedb-async
-)
 # CrateDB Async driver based on httpx.
+![PyPI - Version](https://img.shields.io/pypi/v/cratedb-async)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/cratedb-async)
+![PyPI - License](https://img.shields.io/pypi/l/cratedb-async)
+![PyPI - Status](https://img.shields.io/pypi/status/cratedb-async)
+[![Upload](https://github.com/surister/cratedb-async/actions/workflows/python-publish.yml/badge.svg)](https://github.com/surister/cratedb-async/actions/workflows/python-publish.yml)
 
-
-This CrateDB driver does not follow the DB-API, but its own API design.
+Asynchronous driver for CrateDB, it uses the HTTP protocol and follows its own design.
 
 ## Usage
 
-It can be used with any async library,
+It can be used with any async library:
 
 #### Asyncio
 ```python
@@ -107,8 +107,6 @@ async def main():
 
 asyncio.run(main())
 ```
-
-
 
 ## Style guide
 This project uses Google Python Style guide with minor tweaks, enforced by pyling, read more in
